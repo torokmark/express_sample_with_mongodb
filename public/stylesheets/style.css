@@ -37,6 +37,18 @@ h1 {
 }
 #employees .employee .name {
   background-color: #ffa;
+  height: auto;
+}
+#employees .employee .name form {
+  width: auto;
+  float: right;
+}
+#employees .employee .name form input[type =button],
+#employees .employee .name form input[type =submit] {
+  margin-left: 0px;
+  padding: 3px 2px;
+  background-color: #4479ba;
+  color: #fff;
 }
 .newemployee {
   border: 3px;
@@ -64,4 +76,10 @@ input[type =submit] {
   text-align: right !important;
   display: block;
   float: left;
+}
+.warning {
+  background-color: #fa5858;
+  color: #f6e3ce;
+  font-size: 16px;
+  font-weight: bold;
 }

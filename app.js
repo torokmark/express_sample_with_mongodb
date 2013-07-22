@@ -26,7 +26,13 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-var employeeProvider= new EmployeeProvider(config.db.path, config.db.port, config.db.dbname);
+var employeeProvider = new EmployeeProvider(
+  config.db.path, 
+  config.db.port, 
+  config.db.dbname,
+  config.db.username,
+  config.db.password
+);
 
 //Routes
 
@@ -34,19 +40,20 @@ app.get('/', function(req, res){
   employeeProvider.findAll(function(error, emps){
       res.render('index', {
             title: 'Employees',
-            employees:emps
+            employees:emps,
+            error: error
         });
   });
 });
 
-app.get('/employee/new', function(req, res) {
+app.get('/employee/new', function (req, res) {
     res.render('employee_new', {
         title: 'New Employee'
     });
 });
 
 //save new employee
-app.post('/employee/new', function(req, res){
+app.post('/employee/new', function (req, res){
     employeeProvider.save({
         title: req.param('title'),
         name: req.param('name')
@@ -54,6 +61,46 @@ app.post('/employee/new', function(req, res){
         res.redirect('/')
     });
 });
+
+
+app.get('/employee/:id/edit', function (req, res) {
+    employeeProvider.findById(req.param('_id'), function(error, employee) {
+        res.render('employee_edit', { 
+            employee: employee
+        });
+    });
+});
+
+
+app.post('/employee/:id/edit', function (req, res) {
+    employeeProvider.update(req.param('_id'), {
+        title: req.param('title'),
+        name: req.param('name')
+    }, function(error, docs) {
+        res.redirect('/')
+    });
+});
+
+
+app.post('/employee/:id/delete', function(req, res) {
+    employeeProvider.delete(req.param('_id'), function (error, docs) {
+        res.redirect('/')
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(3000);
 console.log("App is listening to ", 3000);
